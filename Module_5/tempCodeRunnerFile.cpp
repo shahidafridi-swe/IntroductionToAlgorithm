@@ -1,1 +1,0 @@
-&& parentArray[parent]!=child
