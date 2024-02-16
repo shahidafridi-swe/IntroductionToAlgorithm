@@ -1,49 +1,51 @@
-// https://leetcode.com/problems/max-area-of-island/
+// https://leetcode.com/problems/number-of-closed-islands/description/
 
 class Solution
 {
 public:
-    bool vis[55][55];
-    int ans;
     int n, m;
-    vector<pair<int, int>> d = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+    bool vis[105][105];
+    vector<pair<int, int>> d = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
     bool valid(int ci, int cj)
     {
         return (ci >= 0 && ci < n && cj >= 0 && cj < m);
     }
+    bool flag;
     void dfs(int si, int sj, vector<vector<int>> &grid)
     {
         vis[si][sj] = true;
-        ans++;
+        if (si == 0 || si == n - 1 || sj == 0 || sj == m - 1)
+            flag = false;
         for (int i = 0; i < 4; i++)
         {
             int ci = si + d[i].first;
             int cj = sj + d[i].second;
-            if (valid(ci, cj) && !vis[ci][cj] && grid[ci][cj] == 1)
+            if (valid(ci, cj) && !vis[ci][cj] && grid[ci][cj] == 0)
             {
                 dfs(ci, cj, grid);
             }
         }
     }
 
-    int maxAreaOfIsland(vector<vector<int>> &grid)
+    int closedIsland(vector<vector<int>> &grid)
     {
-        memset(vis, false, sizeof(vis));
         n = grid.size();
         m = grid[0].size();
-        int mx = 0;
+        memset(vis, false, sizeof(vis));
+        int ans = 0;
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < m; j++)
             {
-                if (!vis[i][j] && grid[i][j] == 1)
+                if (!vis[i][j] && grid[i][j] == 0)
                 {
-                    ans = 0;
+                    flag = true;
                     dfs(i, j, grid);
-                    mx = max(mx, ans);
+                    if (flag)
+                        ans++;
                 }
             }
         }
-        return mx;
+        return ans;
     }
 };
