@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int dp[1005][1005];
+
 bool subset_sum(int n, int a[], int sum)
 {
 
@@ -11,16 +13,18 @@ bool subset_sum(int n, int a[], int sum)
         else
             return false;
     }
+    if (dp[n][sum] != -1)
+        return dp[n][sum];
     if (a[n - 1] <= sum)
     {
         bool op1 = subset_sum(n - 1, a, sum - a[n - 1]);
         bool op2 = subset_sum(n - 1, a, sum);
-        return op1 || op2;
+        return dp[n][sum] = op1 || op2;
     }
     else
     {
         bool op2 = subset_sum(n - 1, a, sum);
-        return op2;
+        return dp[n][sum] = op2;
     }
 }
 
@@ -35,7 +39,7 @@ int main()
     }
     int sum;
     cin >> sum;
-
+    memset(dp, -1, sizeof(dp));
     subset_sum(n, a, sum) ? cout << "YES" : cout << "NO";
     return 0;
 }
